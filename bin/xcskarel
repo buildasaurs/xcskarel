@@ -68,6 +68,22 @@ class XCSKarelApplication
       end
     end
 
+    command :health do |c|
+      c.syntax = 'xcskarel health [options]'
+      c.description = 'Fetches health information of the specified server'
+      c.example 'get health', 'xcskarel health --hostname 127.0.0.1'
+      add_xcs_options(c)
+      c.action do |args, options|
+        server = create_server_from_options(options)
+        all_health = server.get_health
+        unless options.no_filter
+          all_health = XCSKarel.filter_key_paths(all_health, ['uptime'])
+        end
+        out = options.no_pretty ? JSON.generate(all_health) : JSON.pretty_generate(all_health)
+        puts out
+      end
+    end
+
     command :'server start' do |c|
       c.syntax = 'xcskarel server start [options]'
       c.description = 'Start local Xcode Server'

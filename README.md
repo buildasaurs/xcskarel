@@ -67,6 +67,9 @@ $ xcskarel integrations --host 10.99.0.57 --bot 660bbc6a36d476a32a3830f944085904
 ]
 ```
 
+## others
+- `xcskarel health --host 10.99.0.57` - health information of the server like uptime etc
+
 ## server (wraps [xcscontrol](http://honzadvorsky.com/articles/2015-08-12-xcode_server_hacks_cli_xcscontrol/) commands)
 - `xcskarel server start` - fully starts a local Xcode Server instance
 - `xcskarel server stop` - stops the local Xcode Server instance

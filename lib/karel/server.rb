@@ -34,6 +34,12 @@ module XCSKarel
       JSON.parse(response.body)['results']
     end
 
+    def get_health
+      response = get_endpoint("/health")
+      raise "Failed to get Health of #{@host}" if response.status != 200
+      JSON.parse(response.body)
+    end
+
     def headers
       headers = {
         'user-agent' => 'xcskarel', # XCS wants user agent. for some API calls. not for others. sigh.
