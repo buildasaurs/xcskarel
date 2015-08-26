@@ -33,4 +33,6 @@ Gem::Specification.new do |s|
   
 end
 
+# reading list
 # http://guides.rubygems.org/make-your-own-gem/
+# https://github.com/tj/terminal-table

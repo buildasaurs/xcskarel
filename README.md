@@ -3,7 +3,7 @@
 Quickly manage your Xcode Server & Bots from the command line.
 
 # :white_check_mark: install
-Clone the repo or get on [RubyGems](https://rubygems.org/gems/xcskarel)
+Clone the repo or install from [RubyGems](https://rubygems.org/gems/xcskarel)
 
 ```
 sudo gem install xcskarel
@@ -12,7 +12,7 @@ sudo gem install xcskarel
 # :nut_and_bolt: usage
 To see all options, run `xcskarel --help`.
 
-Two options useful for all commands below
+Two options useful for all commands:
 
 ```
 --no_pretty 
