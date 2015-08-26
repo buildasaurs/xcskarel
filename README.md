@@ -1,5 +1,7 @@
 # xcskarel
 
+[![Gem Version](https://badge.fury.io/rb/xcskarel.svg)](http://badge.fury.io/rb/xcskarel)
+
 Quickly manage your Xcode Server & Bots from the command line.
 
 # :white_check_mark: install
