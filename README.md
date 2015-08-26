@@ -67,6 +67,15 @@ $ xcskarel integrations --host 10.99.0.57 --bot 660bbc6a36d476a32a3830f944085904
 ]
 ```
 
+## server (wraps [xcscontrol](http://honzadvorsky.com/articles/2015-08-12-xcode_server_hacks_cli_xcscontrol/) commands)
+- `xcskarel server start` - fully starts a local Xcode Server instance
+- `xcskarel server stop` - stops the local Xcode Server instance
+- `xcskarel server restart` - restarts the local Xcode Server instance
+- `xcskarel server reset` - stops and deletes the local Xcode Server instance
+
+## xcode
+- `xcskarel xcode select` - Interactive `xcode-select`, finds all local Xcode's and asks which you want to use from now on
+
 # :octocat: my Xcode Server projects
 - [Xcode Server Tutorials](http://honzadvorsky.com/pages/xcode_server_tutorials/) - on how to set up Xcode Server on your Mac in minutes
 - [XcodeServerSDK](https://github.com/czechboy0/XcodeServerSDK) - full Xcode Server SDK written in Swift

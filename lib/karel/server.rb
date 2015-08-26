@@ -80,10 +80,10 @@ module XCSKarel
       begin
         response = get_endpoint("/ping")
       rescue Exception => e
-        raise "Failed to validate - #{e}.\nPlease make sure your Xcode Server is up and running at #{host}".red
+        raise "Failed to validate - #{e}.\nPlease make sure your Xcode Server is up and running at #{host}. Run `xcskarel server start` to start a new local Xcode Server instance.".red
       else
         raise "Failed to validate - Endpoint at \"#{url}\" responded with #{response.data[:status_line]}".red if response.status != 204
-        XCSKarel.log.info "Validation of host #{@host} succeeded.".green
+        XCSKarel.log.debug "Validation of host #{@host} succeeded.".green
       end
     end
   end

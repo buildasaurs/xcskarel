@@ -68,6 +68,68 @@ class XCSKarelApplication
       end
     end
 
+    command :'server start' do |c|
+      c.syntax = 'xcskarel server start [options]'
+      c.description = 'Start local Xcode Server'
+      c.example 'start xcode server', 'xcskarel server start --path /Applications/Xcode.app'
+      c.option '--path XCODE_PATH', 'Xcode path'
+      c.action do |args, options|
+        xcode = options.path
+        unless options.path
+          xcodes = XCSKarel::Control.installed_xcodes
+          raise "No Xcode found, please provide --path" if xcodes.count == 0
+          if xcodes.count > 1
+            choice = choose("Select Xcode version", *xcodes) 
+            xcode = choice
+          else
+            xcode = xcodes.first
+          end
+        end
+
+        XCSKarel::Control.start(xcode)
+      end
+    end
+
+    command :'server stop' do |c|
+      c.syntax = 'xcskarel server stop'
+      c.description = 'Stop local Xcode Server'
+      c.example 'stop xcode server', 'xcskarel server stop'
+      c.action do |args, options|
+        XCSKarel::Control.stop
+      end
+    end
+
+    command :'server restart' do |c|
+      c.syntax = 'xcskarel server restart'
+      c.description = 'Restart local Xcode Server'
+      c.example 'restart xcode server', 'xcskarel server restart'
+      c.action do |args, options|
+        XCSKarel::Control.restart
+      end
+    end
+
+    command :'server reset' do |c|
+      c.syntax = 'xcskarel server reset'
+      c.description = 'Reset local Xcode Server (!!! Deletes all local Bots & Integrations !!!)'
+      c.example 'reset xcode server', 'xcskarel server reset'
+      c.action do |args, options|
+        resp = agree("Are you sure you want to reset your local Xcode Server? This will delete all local Bots and Integrations! (y/n)".red)
+        XCSKarel::Control.reset if resp
+      end
+    end
+
+    command :'xcode select' do |c|
+      c.syntax = 'xcskarel xcode select'
+      c.description = 'Interactive xcode-select'
+      c.example 'choose xcode', 'xcskarel xcode select'
+      c.action do |args, options|
+        xcodes = XCSKarel::Control.installed_xcodes
+        raise "No Xcode found" if xcodes.count == 0
+        xcode = choose("Select Xcode version", *xcodes) 
+        XCSKarel::Control.select(xcode)
+      end
+    end
+
     run!
   end
 end
