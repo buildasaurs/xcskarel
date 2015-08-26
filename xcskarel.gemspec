@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description           = "Tool for managing your Xcode Server & Bot configurations from the command line"
   s.author                = "Honza Dvorsky"
   s.email                 = 'http://honzadvorsky.com'
-  s.homepage              = 'http://rubygems.org/gems/xcskarel'
+  s.homepage              = 'http://github.com/czechboy0/xcskarel'
   s.license               = 'MIT'
 
   s.required_ruby_version = '>= 2.0.0'
