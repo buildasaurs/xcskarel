@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.push File.expand_path('../../lib', __FILE__)
+
+require 'xcskarel'
+require 'pry'
+
+server = XCSKarel::Server.new("10.99.0.57")
+bot_names = server.get_bots.map { |b| b['name'] }.join(",").yellow
+
+XCSKarel.log.info "Server #{server.host} => Fetched bots: [#{bot_names}]"
+
