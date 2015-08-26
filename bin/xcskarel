@@ -3,10 +3,77 @@
 $LOAD_PATH.push File.expand_path('../../lib', __FILE__)
 
 require 'xcskarel'
-require 'pry'
+require 'rubygems'
+require 'commander'
 
-server = XCSKarel::Server.new("10.99.0.57")
-bot_names = server.get_bots.map { |b| b['name'] }.join(",").yellow
+XCSKarel.set_no_log(true)
 
-XCSKarel.log.info "Server #{server.host} => Fetched bots: [#{bot_names}]"
+class XCSKarelApplication
+  include Commander::Methods
+
+  def add_xcs_options(c)
+    c.option '--host Hostname', '(required) Xcode Server\'s hostname or IP address'
+    c.option '--user Username', 'Xcode Server username'
+    c.option '--pass Password', 'Xcode Server password'
+  end
+
+  def create_server_from_options(options)
+    raise "No hostname was specified, please see `xcskarel --help`" unless options.host
+    XCSKarel::Server.new(options.host, options.user, options.pass)
+  end
+
+  def run
+    program :name, 'xcskarel'
+    program :version, XCSKarel::VERSION
+    program :description, 'Tool for managing your Xcode Server & Bot configurations'
+    program :help, 'Author', 'Honza Dvorsky <http://honzadvorsky.com>'
+    program :help, 'GitHub', 'https://github.com/czechboy0/xcskarel'
+
+    global_option('--verbose', 'Print internal logs') { XCSKarel.set_no_log(false) }
+    global_option('--no_pretty', 'Disables output JSON prettification')
+    global_option('--no_filter', 'Prints full JSON payload for objects instead of just filtering the important ones')
+
+    command :bots do |c|
+      c.syntax = 'xcskarel bots [options]'
+      c.description = 'Fetches all Bots found on the specified server'
+      c.example 'get all bot names & identifiers', 'xcskarel bots --hostname 127.0.0.1'
+      c.example 'get all bot metadata', 'xcskarel bots --no_filter --hostname 127.0.0.1'
+      add_xcs_options(c)
+      c.action do |args, options|
+        server = create_server_from_options(options)
+        all_bots = server.get_bots
+        unless options.no_filter
+          all_bots = XCSKarel.filter_array(all_bots, ['name', '_id'])
+        end
+        out = options.no_pretty ? JSON.generate(all_bots) : JSON.pretty_generate(all_bots)
+        puts out
+      end
+    end
+
+    command :integrations do |c|
+      c.syntax = 'xcskarel integrations [options]'
+      c.description = 'Fetches all Integrations for a specified Bot identifier'
+      c.example 'get all integration identifiers, numbers & results', 'xcskarel integrations --bot BOT_ID --hostname 127.0.0.1'
+      add_xcs_options(c)
+      c.option '--bot BOT_ID', '(required) Bot identifier'
+      c.action do |args, options|
+        raise "No Bot id was specified, please see `xcskarel integrations --help`" unless options.bot
+        server = create_server_from_options(options)
+        all_integrations = server.get_integrations(options.bot)
+        unless options.no_filter
+          all_integrations = XCSKarel.filter_array(all_integrations, ['number', '_id', 'currentStep', 'result'])
+        end
+        out = options.no_pretty ? JSON.generate(all_integrations) : JSON.pretty_generate(all_integrations)
+        puts out
+      end
+    end
+
+    run!
+  end
+end
+
+XCSKarelApplication.new.run
+
+
+
 
