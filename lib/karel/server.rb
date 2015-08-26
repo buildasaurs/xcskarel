@@ -29,7 +29,7 @@ module XCSKarel
     end
 
     def get_integrations(bot_id)
-      response = get_endpoint("/bots/#{bot_id}/integrations?limit=10")
+      response = get_endpoint("/bots/#{bot_id}/integrations")
       raise "Failed to fetch Integrations for Bot #{bot_id} from Xcode Server at #{@host}, response: #{response.status}: #{response.body}".red if response.status != 200
       JSON.parse(response.body)['results']
     end
