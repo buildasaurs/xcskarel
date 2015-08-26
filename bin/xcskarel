@@ -146,6 +146,8 @@ class XCSKarelApplication
       end
     end
 
+    default_command :help
+
     run!
   end
 end
