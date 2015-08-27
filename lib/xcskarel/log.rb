@@ -1,7 +1,7 @@
 require 'logger'
 require 'colored'
 
-module xcskarel
+module XCSKarel
 
   @@NO_LOG = false
 

@@ -1,10 +1,10 @@
 require 'excon'
 require 'pry'
-require 'karel/log'
+require 'xcskarel/log'
 require 'json'
 require 'base64'
 
-module xcskarel
+module XCSKarel
 
   class Server
 
@@ -58,7 +58,7 @@ module xcskarel
       url = url_for_endpoint(endpoint)
       headers = self.headers || {}
       response = Excon.get(url, :headers => headers)
-      xcskarel.log.debug "GET endpoint #{endpoint} => #{url} => Response #{response.data[:status_line].gsub("\n", "")}"
+      XCSKarel.log.debug "GET endpoint #{endpoint} => #{url} => Response #{response.data[:status_line].gsub("\n", "")}"
       return response
     end
 
@@ -89,7 +89,7 @@ module xcskarel
         raise "Failed to validate - #{e}.\nPlease make sure your Xcode Server is up and running at #{host}. Run `xcskarel server start` to start a new local Xcode Server instance.".red
       else
         raise "Failed to validate - Endpoint at \"#{url}\" responded with #{response.data[:status_line]}".red if response.status != 204
-        xcskarel.log.debug "Validation of host #{@host} succeeded.".green
+        XCSKarel.log.debug "Validation of host #{@host} succeeded.".green
       end
     end
   end

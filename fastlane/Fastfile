@@ -1,5 +1,5 @@
 
-update_fastlane
+# update_fastlane
 fastlane_version "1.21.0"
 
 before_all do
@@ -36,7 +36,7 @@ end
 
 private_lane :validate_version do
   require "../lib/xcskarel/version"
-  new_version = xcskarel::VERSION
+  new_version = XCSKarel::VERSION
   old_version = JSON.parse(Excon.get("https://rubygems.org/api/v1/gems/xcskarel.json").body)["version"]
   if Gem::Version.new(new_version) <= Gem::Version.new(old_version)
     raise "Version number #{new_version} is already live!"
@@ -47,8 +47,8 @@ private_lane :validate_version do
 end
 
 private_lane :release_gem do |options|
-  sh "cd .. && gem build xcskarel.gemspec"
-  gem_path = "xcskarel-#{options[:version]}.gem"
+  sh "cd .. && rake install"
+  gem_path = "./pkg/xcskarel-#{options[:version]}.gem"
   sh "cd .. && gem push #{gem_path}"
   sh "cd .. && rm #{gem_path}"
 end

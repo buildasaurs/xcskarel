@@ -2,13 +2,13 @@
 
 $LOAD_PATH.push File.expand_path('../../lib', __FILE__)
 
-require 'xcskarel'
+require 'XCSKarel'
 require 'rubygems'
 require 'commander'
 
-xcskarel.set_no_log(true)
+XCSKarel.set_no_log(true)
 
-class xcskarelApplication
+class XCSKarelApplication
   include Commander::Methods
 
   def add_xcs_options(c)
@@ -19,17 +19,17 @@ class xcskarelApplication
 
   def create_server_from_options(options)
     raise "No hostname was specified, please see `xcskarel --help`" unless options.host
-    xcskarel::Server.new(options.host, options.user, options.pass)
+    XCSKarel::Server.new(options.host, options.user, options.pass)
   end
 
   def run
     program :name, 'xcskarel'
-    program :version, xcskarel::VERSION
+    program :version, XCSKarel::VERSION
     program :description, 'Tool for managing your Xcode Server & Bot configurations'
     program :help, 'Author', 'Honza Dvorsky <http://honzadvorsky.com>'
     program :help, 'GitHub', 'https://github.com/czechboy0/xcskarel'
 
-    global_option('--verbose', 'Print internal logs') { xcskarel.set_no_log(false) }
+    global_option('--verbose', 'Print internal logs') { XCSKarel.set_no_log(false) }
     global_option('--no_pretty', 'Disables output JSON prettification')
     global_option('--no_filter', 'Prints full JSON payload for objects instead of just filtering the important ones')
 
@@ -43,7 +43,7 @@ class xcskarelApplication
         server = create_server_from_options(options)
         all_bots = server.get_bots
         unless options.no_filter
-          all_bots = xcskarel.filter_array(all_bots, ['name', '_id'])
+          all_bots = XCSKarel.filter_array(all_bots, ['name', '_id'])
         end
         out = options.no_pretty ? JSON.generate(all_bots) : JSON.pretty_generate(all_bots)
         puts out
@@ -61,7 +61,7 @@ class xcskarelApplication
         server = create_server_from_options(options)
         all_integrations = server.get_integrations(options.bot)
         unless options.no_filter
-          all_integrations = xcskarel.filter_array(all_integrations, ['number', '_id', 'currentStep', 'result'])
+          all_integrations = XCSKarel.filter_array(all_integrations, ['number', '_id', 'currentStep', 'result'])
         end
         out = options.no_pretty ? JSON.generate(all_integrations) : JSON.pretty_generate(all_integrations)
         puts out
@@ -77,7 +77,7 @@ class xcskarelApplication
         server = create_server_from_options(options)
         all_health = server.get_health
         unless options.no_filter
-          all_health = xcskarel.filter_key_paths(all_health, ['uptime'])
+          all_health = XCSKarel.filter_key_paths(all_health, ['uptime'])
         end
         out = options.no_pretty ? JSON.generate(all_health) : JSON.pretty_generate(all_health)
         puts out
@@ -92,7 +92,7 @@ class xcskarelApplication
       c.action do |args, options|
         xcode = options.path
         unless options.path
-          xcodes = xcskarel::Control.installed_xcodes
+          xcodes = XCSKarel::Control.installed_xcodes
           raise "No Xcode found, please provide --path" if xcodes.count == 0
           if xcodes.count > 1
             choice = choose("Select Xcode version", *xcodes) 
@@ -102,7 +102,7 @@ class xcskarelApplication
           end
         end
 
-        xcskarel::Control.start(xcode)
+        XCSKarel::Control.start(xcode)
       end
     end
 
@@ -111,7 +111,7 @@ class xcskarelApplication
       c.description = 'Stop local Xcode Server'
       c.example 'stop xcode server', 'xcskarel server stop'
       c.action do |args, options|
-        xcskarel::Control.stop
+        XCSKarel::Control.stop
       end
     end
 
@@ -120,7 +120,7 @@ class xcskarelApplication
       c.description = 'Restart local Xcode Server'
       c.example 'restart xcode server', 'xcskarel server restart'
       c.action do |args, options|
-        xcskarel::Control.restart
+        XCSKarel::Control.restart
       end
     end
 
@@ -130,7 +130,7 @@ class xcskarelApplication
       c.example 'reset xcode server', 'xcskarel server reset'
       c.action do |args, options|
         resp = agree("Are you sure you want to reset your local Xcode Server? This will delete all local Bots and Integrations! (y/n)".red)
-        xcskarel::Control.reset if resp
+        XCSKarel::Control.reset if resp
       end
     end
 
@@ -139,10 +139,10 @@ class xcskarelApplication
       c.description = 'Interactive xcode-select'
       c.example 'choose xcode', 'xcskarel xcode select'
       c.action do |args, options|
-        xcodes = xcskarel::Control.installed_xcodes
+        xcodes = XCSKarel::Control.installed_xcodes
         raise "No Xcode found" if xcodes.count == 0
         xcode = choose("Select Xcode version", *xcodes) 
-        xcskarel::Control.select(xcode)
+        XCSKarel::Control.select(xcode)
       end
     end
 
@@ -152,7 +152,7 @@ class xcskarelApplication
   end
 end
 
-xcskarelApplication.new.run
+XCSKarelApplication.new.run
 
 
 

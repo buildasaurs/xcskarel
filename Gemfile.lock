@@ -1,0 +1,44 @@
+PATH
+  remote: .
+  specs:
+    xcskarel (0.3.2)
+      colored (= 1.2)
+      commander (= 4.3.5)
+      excon (= 0.45.4)
+      json (= 1.8.3)
+      logger (= 1.2.8)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    byebug (5.0.0)
+      columnize (= 0.9.0)
+    coderay (1.1.0)
+    colored (1.2)
+    columnize (0.9.0)
+    commander (4.3.5)
+      highline (~> 1.7.2)
+    excon (0.45.4)
+    highline (1.7.3)
+    json (1.8.3)
+    logger (1.2.8)
+    method_source (0.8.2)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-byebug (3.2.0)
+      byebug (~> 5.0)
+      pry (~> 0.10)
+    slop (3.6.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  pry (= 0.10.1)
+  pry-byebug (= 3.2.0)
+  xcskarel!
+
+BUNDLED WITH
+   1.10.6

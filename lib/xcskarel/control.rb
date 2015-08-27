@@ -1,5 +1,5 @@
 
-module xcskarel
+module XCSKarel
   module Control
     def self.installed_xcodes
       unless (`mdutil -s /` =~ /disabled/).nil?
@@ -17,12 +17,12 @@ module xcskarel
 
       self.select(xcode)
 
-      xcskarel.log.info "Starting Xcode Server... This may take up to a minute.".yellow
+      XCSKarel.log.info "Starting Xcode Server... This may take up to a minute.".yellow
 
       self.exec_sudo("sudo xcrun xcscontrol --initialize")
       self.exec_sudo("sudo xcrun xcscontrol --preflight")
       
-      xcskarel.log.info "Xcode Server started & running on localhost now!".green
+      XCSKarel.log.info "Xcode Server started & running on localhost now!".green
     end
 
     def self.stop
@@ -44,10 +44,10 @@ module xcskarel
     private
 
     def self.exec_sudo(script)
-      xcskarel.log.warn "Running \'#{script}\', so we need root privileges."
+      XCSKarel.log.warn "Running \'#{script}\', so we need root privileges."
       status, output = self.execute(script)
       raise "Failed to \'#{script}\':\n#{output}".red if status != 0
-      xcskarel.log.debug "Script \'#{script}\' output:\n#{output}"
+      XCSKarel.log.debug "Script \'#{script}\' output:\n#{output}"
       return status, output
     end
 

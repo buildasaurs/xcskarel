@@ -1,3 +1,3 @@
-module xcskarel
+module XCSKarel
   VERSION = '0.3.2'
 end

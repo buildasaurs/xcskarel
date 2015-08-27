@@ -1,12 +1,10 @@
-
-
 $LOAD_PATH.push File.expand_path('../lib', __FILE__)
-require 'karel/version'
+require 'xcskarel/version'
 
 Gem::Specification.new do |s|
 
-  s.name                  = 'xcskarel'
-  s.version               = xcskarel::VERSION
+  s.name                  = "xcskarel"
+  s.version               = XCSKarel::VERSION
   s.date                  = '2015-08-26'
   s.summary               = "Manage your Xcode Server & Bots from the command line"
   s.description           = "Tool for managing your Xcode Server & Bot configurations from the command line"
@@ -19,6 +17,7 @@ Gem::Specification.new do |s|
 
   s.files                 = Dir["lib/**/*"]
   s.require_paths         = ["lib"]
+  s.test_files            = Dir["spec/*_spec.rb"]
 
   s.executables           = Dir["bin/*"].map { |f| File.basename(f) }
 
