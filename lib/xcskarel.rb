@@ -1,6 +1,6 @@
 
-require 'karel/server'
-require 'karel/version'
-require 'karel/log'
-require 'karel/filter'
-require 'karel/control'
+require 'xcskarel/server'
+require 'xcskarel/version'
+require 'xcskarel/log'
+require 'xcskarel/filter'
+require 'xcskarel/control'

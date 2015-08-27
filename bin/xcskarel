@@ -2,7 +2,7 @@
 
 $LOAD_PATH.push File.expand_path('../../lib', __FILE__)
 
-require 'xcskarel'
+require 'XCSKarel'
 require 'rubygems'
 require 'commander'
 

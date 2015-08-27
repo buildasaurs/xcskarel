@@ -1,6 +1,6 @@
 require 'excon'
 require 'pry'
-require 'karel/log'
+require 'xcskarel/log'
 require 'json'
 require 'base64'
 

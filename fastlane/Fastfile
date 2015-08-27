@@ -1,0 +1,108 @@
+
+# update_fastlane
+fastlane_version "1.21.0"
+
+before_all do
+
+end
+
+lane :test do
+  sh "cd .. && bundle install"
+  sh "cd .. && rake install"
+  sh "cd .. && rspec"
+end
+
+lane :release do
+
+  # test
+  validate_repo
+  version = validate_version
+  opts = { version: version }
+  release = release_github(opts)
+  release_gem(opts)
+  github_url = github_release['html_url']
+  opts[:github_url] = github_url
+  slack_brag(opts)
+end
+
+private_lane :validate_repo do
+  ensure_no_debug_code(text: "pry", extension: ".rb", path: "./lib/") # debugging code
+  ensure_no_debug_code(text: "TODO", extension: ".rb", path: "./lib/") # TODOs
+  ensure_git_status_clean
+  ensure_git_branch(branch: 'master')
+  git_pull
+  push_to_git_remote
+end
+
+private_lane :validate_version do
+  require "../lib/xcskarel/version"
+  new_version = XCSKarel::VERSION
+  old_version = JSON.parse(Excon.get("https://rubygems.org/api/v1/gems/xcskarel.json").body)["version"]
+  if Gem::Version.new(new_version) <= Gem::Version.new(old_version)
+    raise "Version number #{new_version} is already live!"
+  else
+    puts "Deploying version #{new_version}."
+  end
+  new_version
+end
+
+private_lane :release_gem do |options|
+  sh "cd .. && rake install"
+  gem_path = "./pkg/xcskarel-#{options[:version]}.gem"
+  sh "cd .. && gem push #{gem_path}"
+  sh "cd .. && rm #{gem_path}"
+end
+
+private_lane :release_github do |options|
+  version = options[:version]
+  github_url = "czechboy0/xcskarel"
+
+  # make sure release doesn't yet exist
+  github_release = get_github_release(url: github_url, version: version)
+  raise "GitHub release #{version} already exists!" if github_release
+
+  # regenerate changelog
+  ensure_git_status_clean
+  sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
+
+  # commit the changes
+  sh "cd .. && git commit -am 'changelog' && git push"
+  ensure_git_status_clean
+
+  # open the changelog so that we can copy the changes into clipboard
+  sh "cd .. && subl CHANGELOG.md"
+
+  # ask for details about the release
+  title = prompt(text: 'Title: ')
+  description = prompt(text: "Please enter a changelog: ",
+                       multi_line_end_keyword: "END")
+
+  github_release = set_github_release(
+    repository_name: github_url,
+    name: [version, title].join(" - "),
+    tag_name: version,
+    description: description,
+    is_draft: false,
+    is_prerelease: false
+  )
+  github_release 
+end
+
+private_lane :slack_brag do |options|
+  version = options[:version]
+  github_url = options[:github_url]
+
+  if ENV['SLACK_URL']
+    slack(
+      channel: "release",
+      message: "Successfully released [xcskarel #{version}](#{github_url}) :rocket:",
+      payload: {
+        "New" => github_release['body']
+      }
+    )
+  else
+    puts "Not Slacking because no SLACK_URL was provided."
+  end
+end
+
+# thanks @krausefx for fastlane's Fastfile which was of great inspiration here.
