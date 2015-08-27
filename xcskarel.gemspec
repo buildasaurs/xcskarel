@@ -6,7 +6,7 @@ require 'karel/version'
 Gem::Specification.new do |s|
 
   s.name                  = 'xcskarel'
-  s.version               = XCSKarel::VERSION
+  s.version               = xcskarel::VERSION
   s.date                  = '2015-08-26'
   s.summary               = "Manage your Xcode Server & Bots from the command line"
   s.description           = "Tool for managing your Xcode Server & Bot configurations from the command line"

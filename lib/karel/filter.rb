@@ -1,7 +1,7 @@
 
 require 'set'
 
-module XCSKarel
+module xcskarel
   # returns a copy of the passed-in hash with only the provided keypaths kept
   # e.g. "name" will keep the key "name" at the top level.
   # TODO: support even nested keypaths
