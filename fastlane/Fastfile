@@ -19,6 +19,7 @@ lane :release do
   release_gem(opts)
   github_url = release['html_url']
   opts[:github_url] = github_url
+  opts[:release] = release
   slack_brag(opts)
 end
 
@@ -94,13 +95,14 @@ end
 private_lane :slack_brag do |options|
   version = options[:version]
   github_url = options[:github_url]
+  release = options[:release]
 
   if ENV['SLACK_URL']
     slack(
       channel: "release",
       message: "Successfully released [xcskarel #{version}](#{github_url}) :rocket:",
       payload: {
-        "New" => github_release['body']
+        "New" => release['body']
       }
     )
   else
