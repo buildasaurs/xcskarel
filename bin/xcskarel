@@ -12,14 +12,14 @@ class XCSKarelApplication
   include Commander::Methods
 
   def add_xcs_options(c)
-    c.option '--host Hostname', '(required) Xcode Server\'s hostname or IP address'
+    c.option '--host Hostname', '(required) Xcode Server\'s hostname or IP address (default: localhost)'
     c.option '--user Username', 'Xcode Server username'
     c.option '--pass Password', 'Xcode Server password'
   end
 
   def create_server_from_options(options)
-    raise "No hostname was specified, please see `xcskarel --help`" unless options.host
-    XCSKarel::Server.new(options.host, options.user, options.pass)
+    host = options.host || "localhost"
+    XCSKarel::Server.new(host, options.user, options.pass)
   end
 
   def run
@@ -42,9 +42,13 @@ class XCSKarelApplication
       c.action do |args, options|
         server = create_server_from_options(options)
         all_bots = server.get_bots
+        # create Bot instances
+        bot_objs = all_bots.map { |json| XCSKarel::Bot.new(json) }
+        bot_files = bot_objs.map { |bot| name = "./xcskarel/#{bot.json['_id']}.json"; bot.to_file(name); name }
         unless options.no_filter
-          all_bots = XCSKarel.filter_array(all_bots, ['name', '_id'])
+          all_bots = XCSKarel::Filter.filter_key_paths(all_bots, ['name', '_id'])
         end
+        binding.pry
         out = options.no_pretty ? JSON.generate(all_bots) : JSON.pretty_generate(all_bots)
         puts out
       end
@@ -61,7 +65,7 @@ class XCSKarelApplication
         server = create_server_from_options(options)
         all_integrations = server.get_integrations(options.bot)
         unless options.no_filter
-          all_integrations = XCSKarel.filter_array(all_integrations, ['number', '_id', 'currentStep', 'result'])
+          all_integrations = XCSKarel::Filter.filter_key_paths(all_integrations, ['number', '_id', 'currentStep', 'result'])
         end
         out = options.no_pretty ? JSON.generate(all_integrations) : JSON.pretty_generate(all_integrations)
         puts out
@@ -77,7 +81,7 @@ class XCSKarelApplication
         server = create_server_from_options(options)
         all_health = server.get_health
         unless options.no_filter
-          all_health = XCSKarel.filter_key_paths(all_health, ['uptime'])
+          all_health = XCSKarel::Filter.filter_key_paths(all_health, ['uptime'])
         end
         out = options.no_pretty ? JSON.generate(all_health) : JSON.pretty_generate(all_health)
         puts out
