@@ -30,7 +30,7 @@ end
 
 private_lane :validate_repo do
   ensure_no_debug_code(text: "pry", extension: ".rb", path: "./lib/") # debugging code
-  ensure_no_debug_code(text: "TODO", extension: ".rb", path: "./lib/") # TODOs
+  # ensure_no_debug_code(text: "TODO", extension: ".rb", path: "./lib/") # TODOs
   ensure_git_status_clean
   ensure_git_branch(branch: 'master')
   git_pull
