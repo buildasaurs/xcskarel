@@ -81,6 +81,7 @@ private_lane :release_github do |options|
                        multi_line_end_keyword: "END")
 
   github_release = set_github_release(
+    api_token: ENV['GITHUB_TOKEN']
     repository_name: github_url,
     name: [version, title].join(" - "),
     tag_name: version,
