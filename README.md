@@ -1,5 +1,6 @@
 # xcskarel
 
+[![Travis Status](https://travis-ci.org/czechboy0/xcskarel.svg)](https://travis-ci.org/czechboy0/xcskarel)
 [![Gem Version](https://badge.fury.io/rb/xcskarel.svg)](http://badge.fury.io/rb/xcskarel)
 
 Quickly manage your Xcode Server & Bots from the command line.
