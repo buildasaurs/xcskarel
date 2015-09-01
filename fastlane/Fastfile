@@ -69,7 +69,7 @@ private_lane :release_github do |options|
   sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
 
   # commit the changes
-  # sh "cd .. && git commit -am 'changelog' && git push"
+  sh "cd .. && git commit -am 'changelog' && git push"
   ensure_git_status_clean
 
   # open the changelog so that we can copy the changes into clipboard
@@ -109,4 +109,3 @@ private_lane :slack_brag do |options|
 end
 
 # thanks @krausefx for fastlane's Fastfile which was of great inspiration here.
-
