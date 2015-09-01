@@ -1,0 +1,114 @@
+{
+  "_id": "448946985304230369392c2e6b05a821",
+  "_rev": "5-bf14930d939ca02ab18f3e4e85d2cce9",
+  "configuration": {
+    "builtFromClean": 0,
+    "periodicScheduleInterval": 0,
+    "codeCoveragePreference": 2,
+    "performsTestAction": true,
+    "triggers": [
+      {
+        "phase": 1,
+        "scriptBody": "cd B*\nfastlane prebuild\n",
+        "type": 1,
+        "name": "prebuild"
+      }
+    ],
+    "performsAnalyzeAction": true,
+    "schemeName": "Buildasaur",
+    "exportsProductFromArchive": true,
+    "weeklyScheduleDay": 0,
+    "deviceSpecification": {
+      "filters": [
+        {
+          "platform": {
+            "buildNumber": "15A244e",
+            "_id": "448946985304230369392c2e6b001937",
+            "_rev": "3-eac6052035b3570d73cb895372ae92f0",
+            "displayName": "OS X",
+            "identifier": "com.apple.platform.macosx",
+            "version": "1.1"
+          },
+          "filterType": 0,
+          "architectureType": 1
+        }
+      ],
+      "deviceIdentifiers": [
+
+      ]
+    },
+    "minutesAfterHourToIntegrate": 0,
+    "scheduleType": 3,
+    "hourOfIntegration": 0,
+    "performsArchiveAction": false,
+    "testingDestinationType": 7,
+    "sourceControlBlueprint": {
+      "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+        "1C5C2A17EEADA6DBF6678501245487A71FBE28BB": {
+          "DVTSourceControlBranchIdentifierKey": "gladiolus",
+          "DVTSourceControlBranchOptionsKey": 156,
+          "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+        }
+      },
+      "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "1C5C2A17EEADA6DBF6678501245487A71FBE28BB",
+      "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey": {
+      },
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationStrategiesKey": {
+        "1C5C2A17EEADA6DBF6678501245487A71FBE28BB": {
+          "DVTSourceControlWorkspaceBlueprintRemoteRepositoryAuthenticationTypeKey": "DVTSourceControlSSHKeysAuthenticationStrategy"
+        }
+      },
+      "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey": {
+        "1C5C2A17EEADA6DBF6678501245487A71FBE28BB": 0
+      },
+      "DVTSourceControlWorkspaceBlueprintIdentifierKey": "B07F8B3A-1F8E-4048-B5C2-B3AE9F72A783",
+      "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+        "1C5C2A17EEADA6DBF6678501245487A71FBE28BB": "Buildasaur/"
+      },
+      "DVTSourceControlWorkspaceBlueprintNameKey": "Buildasaur",
+      "DVTSourceControlWorkspaceBlueprintVersion": 204,
+      "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Buildasaur.xcworkspace",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+        {
+          "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "github.com:czechboy0/Buildasaur.git",
+          "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+          "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "1C5C2A17EEADA6DBF6678501245487A71FBE28BB"
+        }
+      ]
+    }
+  },
+  "group": {
+    "name": "816AAA49-C702-4BF6-A74E-B912892CED39"
+  },
+  "requiresUpgrade": false,
+  "name": "BuildaBot [czechboy0/Buildasaur] |-> gladiolus",
+  "type": 1,
+  "integration_counter": 2,
+  "doc_type": "bot",
+  "tinyID": "F3C6127",
+  "lastRevisionBlueprint": {
+    "DVTSourceControlWorkspaceBlueprintLocationsKey": {
+      "1C5C2A17EEADA6DBF6678501245487A71FBE28BB": {
+        "DVTSourceControlBranchIdentifierKey": "gladiolus",
+        "DVTSourceControlLocationRevisionKey": "ab9149c683b3099ca9ba889d1f39d80b15559ec1",
+        "DVTSourceControlBranchOptionsKey": 4,
+        "DVTSourceControlWorkspaceBlueprintLocationTypeKey": "DVTSourceControlBranch"
+      }
+    },
+    "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey": "1C5C2A17EEADA6DBF6678501245487A71FBE28BB",
+    "DVTSourceControlWorkspaceBlueprintIdentifierKey": "9CA38956-7903-45E9-AC5B-FC4B5F37FBD1",
+    "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey": {
+      "1C5C2A17EEADA6DBF6678501245487A71FBE28BB": "Buildasaur"
+    },
+    "DVTSourceControlWorkspaceBlueprintNameKey": "Buildasaur",
+    "DVTSourceControlWorkspaceBlueprintVersion": 204,
+    "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey": "Buildasaur.xcworkspace",
+    "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey": [
+      {
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey": "github.com:czechboy0/Buildasaur.git",
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey": "com.apple.dt.Xcode.sourcecontrol.Git",
+        "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey": "1C5C2A17EEADA6DBF6678501245487A71FBE28BB"
+      }
+    ]
+  }
+}

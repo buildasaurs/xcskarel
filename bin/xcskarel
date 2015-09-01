@@ -43,12 +43,11 @@ class XCSKarelApplication
         server = create_server_from_options(options)
         all_bots = server.get_bots
         # create Bot instances
-        bot_objs = all_bots.map { |json| XCSKarel::Bot.new(json) }
-        bot_files = bot_objs.map { |bot| name = "./xcskarel/#{bot.json['_id']}.json"; bot.to_file(name); name }
+        # bot_objs = all_bots.map { |json| XCSKarel::Bot.new(json) }
+        # bot_files = bot_objs.map { |bot| name = "./xcskarel/#{bot.json['_id']}.json"; bot.to_file(name); name }
         unless options.no_filter
           all_bots = XCSKarel::Filter.filter_key_paths(all_bots, ['name', '_id'])
         end
-        binding.pry
         out = options.no_pretty ? JSON.generate(all_bots) : JSON.pretty_generate(all_bots)
         puts out
       end
