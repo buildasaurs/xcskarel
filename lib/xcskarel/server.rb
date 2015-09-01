@@ -1,5 +1,4 @@
 require 'excon'
-require 'pry'
 require 'xcskarel/log'
 require 'json'
 require 'base64'
