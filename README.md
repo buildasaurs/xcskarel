@@ -68,7 +68,7 @@ $ xcskarel status --host 192.168.1.64
 ## start an integration
 
 ```ruby
-$ xcskarel xcskarel integrate --bot "Builda On Commit" --host 192.168.1.64                        
+$ xcskarel integrate --bot "Builda On Commit" --host 192.168.1.64                        
 INFO [2015-09-02 18:44:31.99]: Successfully started integration 69 on Bot "Builda On Commit"
 +--------------------------------------------------+----------------------------------+------------------+--------------------+--------------------+
 |                                                               https://192.168.1.64                                                               |
