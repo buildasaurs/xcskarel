@@ -24,7 +24,9 @@ module XCSKarel
             key.split('.').first == keys.first
           end.first
           if match
-            new_hash[keys.first] = filter_key_paths(v, match.split('.').drop(1))
+            child_key_paths = match.split('.').drop(1)
+            # if there are no more key paths, we just take everything (whitelisted by default)
+            new_hash[keys.first] = child_key_paths.count == 0 ? v : filter_key_paths(v, child_key_paths)
           end
         end
         return new_hash

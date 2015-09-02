@@ -43,6 +43,25 @@ describe XCSKarel do
       expect(test(obj, ["oranges.old"])).to eq(exp)
     end
 
+    it "keeps full values when hashes and key is already whitelisted" do
+      obj = {
+        "apples" => "green",
+        "blackberries" => 12,
+        "oranges" => {
+          "new" => 2,
+          "old" => -2
+        }
+      }
+      exp = {
+        "apples" => "green",
+        "oranges" => {
+          "new" => 2,
+          "old" => -2
+        }
+      }
+      expect(test(obj, ["oranges", "apples"])).to eq(exp)
+    end
+
     it "handles basic key path with an array without popping the key path" do
       obj = [
         "apples",

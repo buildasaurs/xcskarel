@@ -11,6 +11,7 @@ module XCSKarel
     attr_reader :user
     attr_reader :pass
     attr_reader :port
+    attr_reader :api_version
 
     def initialize(host, user=nil, pass=nil, allow_self_signed=true)
       @port = 20343
@@ -88,7 +89,8 @@ module XCSKarel
         raise "Failed to validate - #{e}.\nPlease make sure your Xcode Server is up and running at #{host}. Run `xcskarel server start` to start a new local Xcode Server instance.".red
       else
         raise "Failed to validate - Endpoint at \"#{url}\" responded with #{response.data[:status_line]}".red if response.status != 204
-        XCSKarel.log.debug "Validation of host #{@host} succeeded.".green
+        @api_version = response.headers['X-XCSAPIVersion'].to_s
+        XCSKarel.log.debug "Validation of host #{@host} (API version #{@api_version}) succeeded.".green
       end
     end
   end
