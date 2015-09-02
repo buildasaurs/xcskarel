@@ -52,7 +52,7 @@ module XCSKarel
     def self.colorize(key, value)
       value ||= ""
       case key
-      when "integration_step"
+      when "current_step"
         case value
         when "completed"
           value = value.white
@@ -61,7 +61,7 @@ module XCSKarel
         else
           value = value.yellow
         end
-      when "integration_result"
+      when "result"
         case value
         when "succeeded"
           value = value.green
