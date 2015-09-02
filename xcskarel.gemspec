@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'logger', '1.2.8' # logging
   s.add_dependency 'colored', '1.2' # colored logging
   s.add_dependency 'commander', '4.3.5' # CLI parser
+  s.add_dependency 'terminal-table', '1.4.5' # nice terminal tables
 
   s.add_development_dependency 'pry', '0.10.1' # debugging
   s.add_development_dependency 'pry-byebug', '3.2.0' # better debugging
@@ -38,4 +39,3 @@ end
 
 # reading list
 # http://guides.rubygems.org/make-your-own-gem/
-# https://github.com/tj/terminal-table

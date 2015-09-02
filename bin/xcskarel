@@ -17,6 +17,10 @@ class XCSKarelApplication
     c.option '--pass Password', 'Xcode Server password'
   end
 
+  def add_bot_options(c)
+    c.option '--bot BOT_ID', '(required) Bot identifier'
+  end
+
   def create_server_from_options(options)
     host = options.host || "localhost"
     XCSKarel::Server.new(host, options.user, options.pass)
@@ -104,7 +108,7 @@ class XCSKarelApplication
       c.description = 'Fetches all Integrations for a specified Bot identifier'
       c.example 'get all integration identifiers, numbers & results', 'xcskarel integrations --bot BOT_ID --hostname 127.0.0.1'
       add_xcs_options(c)
-      c.option '--bot BOT_ID', '(required) Bot identifier'
+      add_bot_options(c)
       c.action do |args, options|
         raise "No Bot id was specified, please see `xcskarel integrations --help`" unless options.bot
         server = create_server_from_options(options)
@@ -114,6 +118,21 @@ class XCSKarelApplication
         end
         out = options.no_pretty ? JSON.generate(all_integrations) : JSON.pretty_generate(all_integrations)
         puts out
+      end
+    end
+
+    command :integrate do |c|
+      c.syntax = 'xcskarel integrate [options]'
+      c.description = 'Kicks of an integration for the specified Bot id or name'
+      c.example 'starts an integration on localhost for bot name', 'xcskarel integrate --bot bot_archiver'
+      c.example 'starts an integration on a remote server for bot id', 'xcskarel integrate --bot 448946985304230369392c2e6b05a821 --host 192.168.1.64'
+      add_xcs_options(c)
+      add_bot_options(c)
+      c.action do |args, options|
+        bot = options.bot
+        raise "No Bot id or name was specified, please see `xcskarel integrations --help`" unless bot
+        server = create_server_from_options(options)
+        XCSKarel::Application.integrate(server, bot)
       end
     end
 
@@ -130,6 +149,17 @@ class XCSKarelApplication
         end
         out = options.no_pretty ? JSON.generate(all_health) : JSON.pretty_generate(all_health)
         puts out
+      end
+    end
+
+    command :status do |c|
+      c.syntax = 'xcskarel status [options]'
+      c.description = 'Fetches status information of the specified server'
+      c.example 'get status', 'xcskarel status --hostname 127.0.0.1'
+      add_xcs_options(c)
+      c.action do |args, options|
+        server = create_server_from_options(options)
+        XCSKarel::Application.print_status(server)
       end
     end
 
