@@ -33,6 +33,52 @@ class XCSKarelApplication
     global_option('--no_pretty', 'Disables output JSON prettification')
     global_option('--no_filter', 'Prints full JSON payload for objects instead of just filtering the important ones')
 
+    # Managing local xcsconfig folder
+
+    command :'config list' do |c|
+      c.syntax = 'xcskarel config list [options]'
+      c.description = 'Lists the Xcode Bot configurations found in this folder'
+      c.example 'lists all configurations stored in this folder', 'xcskarel config list'
+      c.action do |args, options|
+        config_folder = XCSKarel::XCSFile.get_config_folder
+        return unless config_folder
+        XCSKarel::Application.list_configs(config_folder)
+      end
+    end
+
+    command :'config show' do |c|
+      c.syntax = 'xcskarel config show [options]'
+      c.description = 'Opens the selected config for editing'
+      c.example 'opens a config of choice', 'xcskarel config show'
+      c.action do |args, options|
+        config_folder = XCSKarel::XCSFile.get_config_folder
+        return unless config_folder
+        XCSKarel::Application.show_config(config_folder)
+      end
+    end
+
+    command :'config new' do |c|
+      c.syntax = 'xcskarel config new [options]'
+      c.description = 'Starts the interactive process of creating a new config from an existing Bot'
+      c.example 'starts creating new config from server at 192.168.1.64', 'xcskarel config new --host 192.168.1.64'
+      add_xcs_options(c)
+      c.action do |args, options|
+        
+        # let user chose a bot from the server
+        server = create_server_from_options(options)
+        bot = XCSKarel::Application.choose_bot(server)
+
+        # get our config folder
+        config_folder = XCSKarel::XCSFile.get_config_folder
+        return unless config_folder
+
+        # dump the bot into that config folder under a random name
+        XCSKarel::Application.save_bot(config_folder, bot, server.api_version)
+      end
+    end
+
+    # Talking to Xcode Server API
+
     command :bots do |c|
       c.syntax = 'xcskarel bots [options]'
       c.description = 'Fetches all Bots found on the specified server'
@@ -87,6 +133,8 @@ class XCSKarelApplication
       end
     end
 
+    # Managing a local Xcode Server
+
     command :'server start' do |c|
       c.syntax = 'xcskarel server start [options]'
       c.description = 'Start local Xcode Server'
@@ -136,6 +184,8 @@ class XCSKarelApplication
         XCSKarel::Control.reset if resp
       end
     end
+
+    # Managing Xcode
 
     command :'xcode select' do |c|
       c.syntax = 'xcskarel xcode select'
