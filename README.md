@@ -32,14 +32,6 @@ $ xcskarel bots --host 10.99.0.57
   {
     "_id": "02440afb1e7a51dc9795319121038f17",
     "name": "buildasaur-release"
-  },
-  {
-    "_id": "02440afb1e7a51dc97953191217e5ab0",
-    "name": "buildasaur-master"
-  },
-  {
-    "_id": "069200f4acb7aa061c469e7b0ebd7d44",
-    "name": "BuildaBot [czechboy0/Buildasaur] PR #123"
   }
 ]
 ```
@@ -54,21 +46,45 @@ $ xcskarel integrations --host 10.99.0.57 --bot 660bbc6a36d476a32a3830f944085904
     "currentStep": "completed",
     "number": 5,
     "result": "test-failures"
-  },
-  {
-    "_id": "c188b6a9c16869be006c66815fca5dbd",
-    "currentStep": "completed",
-    "number": 4,
-    "result": "warnings"
-  },
-  {
-    "_id": "660bbc6a36d476a32a3830f94487c29b",
-    "currentStep": "completed",
-    "number": 2,
-    "result": "succeeded"
   }
 ]
 ```
+
+## status
+
+```ruby
+$ xcskarel status --host 192.168.1.64
++--------------------------------------------------+----------------------------------+------------------+--------------------+--------------------+
+|                                                               https://192.168.1.64                                                               |
++--------------------------------------------------+----------------------------------+------------------+--------------------+--------------------+
+| bot_name                                         | bot_id                           | integration_step | integration_result | integration_number |
++--------------------------------------------------+----------------------------------+------------------+--------------------+--------------------+
+| BuildaBot [czechboy0/XcodeServerSDK] |-> swift-2 | 3ce25bc9ed5bfffb854947b02600166d | completed        | succeeded          | 4                  |
+| Builda Archiver                                  | 6b3de48352a8126ce7e08ecf85093613 | pending          |                    | 10                 |
+| Builda On Commit                                 | 6c8d3225beff941b3a420554df16cb0d | completed        | checkout-error     | 68                 |
++--------------------------------------------------+----------------------------------+------------------+--------------------+--------------------+
+```
+
+## start an integration
+
+```ruby
+$ xcskarel xcskarel integrate --bot "Builda On Commit" --host 192.168.1.64                        
+INFO [2015-09-02 18:44:31.99]: Successfully started integration 69 on Bot "Builda On Commit"
++--------------------------------------------------+----------------------------------+------------------+--------------------+--------------------+
+|                                                               https://192.168.1.64                                                               |
++--------------------------------------------------+----------------------------------+------------------+--------------------+--------------------+
+| bot_name                                         | bot_id                           | integration_step | integration_result | integration_number |
++--------------------------------------------------+----------------------------------+------------------+--------------------+--------------------+
+| BuildaBot [czechboy0/XcodeServerSDK] |-> swift-2 | 3ce25bc9ed5bfffb854947b02600166d | completed        | succeeded          | 4                  |
+| Builda Archiver                                  | 6b3de48352a8126ce7e08ecf85093613 | completed        | succeeded          | 10                 |
+| Builda On Commit                                 | 6c8d3225beff941b3a420554df16cb0d | pending          |                    | 69                 |
++--------------------------------------------------+----------------------------------+------------------+--------------------+--------------------+
+```
+
+## manage bot configurations in your git repo
+- `config list`    Lists the Xcode Bot configurations found in this folder              
+- `config new`     Starts the interactive process of creating a new config from an existing Bot         
+- `config show`    Opens the selected config for editing
 
 ## others
 - `xcskarel health --host 10.99.0.57` - health information of the server like uptime etc

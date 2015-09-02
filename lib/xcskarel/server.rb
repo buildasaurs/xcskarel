@@ -40,6 +40,44 @@ module XCSKarel
       JSON.parse(response.body)
     end
 
+    def fetch_status
+      # all bots and their integration's statuses
+      bot_statuses = []
+      bots = self.get_bots
+      bots.map do |bot|
+        status = {}
+        status['bot_name'] = bot['name']
+        status['bot_id'] = bot['_id']
+        last_integration = self.get_integrations(bot['_id']).first # sorted from newest to oldest
+        status['integration_step'] = last_integration['currentStep']
+        status['integration_result'] = last_integration['result']
+        status['integration_number'] = last_integration['number']
+        bot_statuses << status
+      end
+      return bot_statuses
+    end
+
+    def integrate(bot)
+      response = post_endpoint("/bots/#{bot['_id']}/integrations", nil)
+      integration = response.body
+      if response.status == 201
+        require 'json'
+        integration = JSON.parse(integration)
+        XCSKarel.log.info "Successfully started integration #{integration['number']} on Bot \"#{bot['name']}\"".green
+      else
+        raise "Failed to integrate Bot #{bot_id}".red
+      end
+      return integration
+    end
+
+    def find_bot_by_id_or_name(id_or_name)
+      bots = self.get_bots
+      found_bots = bots.select { |bot| [bot['name'], bot['_id']].index(id_or_name) != nil }
+      raise "No Bot found for \"#{id_or_name}\"".red if found_bots.count == 0
+      XCSKarel.log.warn "More than one Bot found for \"#{id_or_name}\", taking the first one (you shouldn't have more Bots with the same name!)".red if found_bots.count > 1
+      return found_bots.first
+    end
+
     def headers
       headers = {
         'user-agent' => 'xcskarel', # XCS wants user agent. for some API calls. not for others. sigh.
@@ -55,14 +93,36 @@ module XCSKarel
     end
 
     def get_endpoint(endpoint)
-      url = url_for_endpoint(endpoint)
-      headers = self.headers || {}
-      response = Excon.get(url, :headers => headers)
-      XCSKarel.log.debug "GET endpoint #{endpoint} => #{url} => Response #{response.data[:status_line].gsub("\n", "")}"
-      return response
+      call_endpoint("get", endpoint, nil)
+    end
+
+    def post_endpoint(endpoint, body)
+      call_endpoint("post", endpoint, body)
     end
 
     private
+
+    def call_endpoint(method, endpoint, body)
+      method.downcase!
+      url = url_for_endpoint(endpoint)
+      case method
+      when "get"
+        response = Excon.get(url, headers: headers)
+      when "post"
+        response = Excon.post(url, headers: headers, body: body)
+      else
+        raise "Unrecognized method #{method}"
+      end
+      msg = "#{method.upcase} endpoint #{endpoint} => #{url} => Response #{response.data[:status_line].gsub("\n", "")}"
+
+      case response.status
+      when 200..300
+        XCSKarel.log.debug msg.green
+      else
+        XCSKarel.log.warn msg.red
+      end
+      return response
+    end
 
     def url_for_endpoint(endpoint)
       "#{@host}:#{@port}/api#{endpoint}"
@@ -86,9 +146,9 @@ module XCSKarel
       begin
         response = get_endpoint("/ping")
       rescue Exception => e
-        raise "Failed to validate - #{e}.\nPlease make sure your Xcode Server is up and running at #{host}. Run `xcskarel server start` to start a new local Xcode Server instance.".red
+        raise "Failed to validate - #{e}.\nPlease make sure your Xcode Server is up and running at #{@host}. Run `xcskarel server start` to start a new local Xcode Server instance.".red
       else
-        raise "Failed to validate - Endpoint at \"#{url}\" responded with #{response.data[:status_line]}".red if response.status != 204
+        raise "Failed to validate - Endpoint responded with #{response.data[:status_line]}".red if response.status != 204
         @api_version = response.headers['X-XCSAPIVersion'].to_s
         XCSKarel.log.debug "Validation of host #{@host} (API version #{@api_version}) succeeded.".green
       end

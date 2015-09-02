@@ -48,5 +48,61 @@ module XCSKarel
       XCSKarel.log.info "Editing config \"#{config.name}\""
       system "open \"#{config.path}\""
     end
+
+    def self.colorize(key, value)
+      value ||= ""
+      case key
+      when "integration_step"
+        case value
+        when "completed"
+          value = value.white
+        when "pending"
+          value = value.blue
+        else
+          value = value.yellow
+        end
+      when "integration_result"
+        case value
+        when "succeeded"
+          value = value.green
+        when "canceled"
+          value = value.yellow
+        else
+          value = value.red
+        end
+      end
+      return value
+    end
+
+    def self.print_status(server)
+      statuses = server.fetch_status
+      require 'terminal-table'
+
+      head = statuses.first.keys
+      table = Terminal::Table.new do |t|
+        statuses.each do |status|
+          r = head.map { |h| self.colorize(h, status[h]) }
+          t.add_row r
+        end
+      end
+      table.title = server.host
+      table.headings = head
+      # table.style = {:width => 160}
+      puts table.to_s
+    end
+
+    def self.integrate(server, bot_id_or_name)
+
+      # find bot by id or name
+      bot = server.find_bot_by_id_or_name(bot_id_or_name)
+      XCSKarel.log.debug "Found Bot #{bot['name']} with id #{bot['_id']}".yellow
+
+      # kick off an integration
+      server.integrate(bot)
+
+      # print the new status (TODO: highlight the bot's row)
+      self.print_status(server)
+    end
+
   end
 end
