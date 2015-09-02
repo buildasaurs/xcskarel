@@ -56,7 +56,6 @@ private_lane :release_gem do |options|
   sh "cd .. && sudo rake install"
   gem_path = "./pkg/xcskarel-#{options[:version]}.gem"
   sh "cd .. && gem push #{gem_path}"
-  sh "cd .. && rm #{gem_path}"
 end
 
 private_lane :changelog do
