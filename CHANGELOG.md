@@ -1,5 +1,13 @@
 # Change Log
 
+## [Unreleased](https://github.com/czechboy0/xcskarel/tree/HEAD)
+
+[Full Changelog](https://github.com/czechboy0/xcskarel/compare/0.10.0...HEAD)
+
+**Merged pull requests:**
+
+- Fix: Status for Bots with 0 integrations, added Branch to status view [\#10](https://github.com/czechboy0/xcskarel/pull/10) ([czechboy0](https://github.com/czechboy0))
+
 ## [0.10.0](https://github.com/czechboy0/xcskarel/tree/0.10.0) (2015-09-02)
 
 [Full Changelog](https://github.com/czechboy0/xcskarel/compare/0.8.0...0.10.0)
