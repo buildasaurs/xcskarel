@@ -59,11 +59,12 @@ module XCSKarel
 
     def self.random_name
       require 'securerandom'
-      "botconfig_#{SecureRandom.hex(6)}.json"
+      "#{SecureRandom.hex(6)}"
     end
 
-    def self.new_config_name(folder)
-      File.join(folder, self.random_name)
+    def self.new_config_name(folder, name)
+      name = name.split('.').first + ".json"
+      File.join(folder, name)
     end
 
   end

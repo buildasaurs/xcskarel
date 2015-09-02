@@ -11,15 +11,15 @@ module XCSKarel
     end
 
     def name
+      (config_json['name'] || File.basename(@path).split('.').first).gsub("botconfig_", "")
+    end
+
+    def original_bot_name
       @json['name'] || config_json['original_bot_name']
     end
 
-    def created
-      config_json['time_generated']
-    end
-
     def config_json
-      @json['xcsconfig']
+      @json['xcsconfig'] || {}
     end
 
     def key_paths_for_persistance
@@ -42,8 +42,8 @@ module XCSKarel
         filtered["xcsconfig"] = {
           format_version: format_version,
           app_version: XCSKarel::VERSION,
-          time_generated: Time.new.to_s,
           original_bot_name: @json['name'],
+          name: name,
           api_version: @api_version
         }
       end
@@ -72,7 +72,7 @@ module XCSKarel
 
     def to_file(file_path)
       abs_path = File.absolute_path(file_path)
-      raise "File #{abs_path} already exists." if File.exist?(abs_path)
+      raise "File #{abs_path} already exists. Choose a different name.".red if File.exist?(abs_path)
       FileUtils.mkdir_p(File.dirname(abs_path))
       File.open(abs_path, 'w') do |f|  
         f.puts JSON.pretty_generate(json_for_persistence) + "\n"

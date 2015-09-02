@@ -36,25 +36,31 @@ class XCSKarelApplication
     # Managing local xcsconfig folder
 
     command :'config list' do |c|
-      c.syntax = 'xcskarel config [options]'
+      c.syntax = 'xcskarel config list [options]'
       c.description = 'Lists the Xcode Bot configurations found in this folder'
+      c.example 'lists all configurations stored in this folder', 'xcskarel config list'
       c.action do |args, options|
         config_folder = XCSKarel::XCSFile.get_config_folder
         return unless config_folder
-        configs = XCSKarel::XCSFile.load_configs(config_folder)
-        if configs.count == 0
-          XCSKarel.log.info "Found no existing configs in #{config_folder}".yellow
-        else
-          out = "\n" + configs.map { |c| "#{File.basename(c.path)}".yellow + " - from " + "\"#{c.name}\"".yellow + ", created at #{c.created}" }.join("\n")
-          XCSKarel.log.info "Found #{configs.count} configs in \"#{config_folder}\":"
-          XCSKarel.log.info out
-        end
+        XCSKarel::Application.list_configs(config_folder)
+      end
+    end
+
+    command :'config show' do |c|
+      c.syntax = 'xcskarel config show [options]'
+      c.description = 'Opens the selected config for editing'
+      c.example 'opens a config of choice', 'xcskarel config show'
+      c.action do |args, options|
+        config_folder = XCSKarel::XCSFile.get_config_folder
+        return unless config_folder
+        XCSKarel::Application.show_config(config_folder)
       end
     end
 
     command :'config new' do |c|
       c.syntax = 'xcskarel config new [options]'
       c.description = 'Starts the interactive process of creating a new config from an existing Bot'
+      c.example 'starts creating new config from server at 192.168.1.64', 'xcskarel config new --host 192.168.1.64'
       add_xcs_options(c)
       c.action do |args, options|
         
@@ -67,12 +73,7 @@ class XCSKarelApplication
         return unless config_folder
 
         # dump the bot into that config folder under a random name
-        new_config_path = XCSKarel::XCSFile.new_config_name(config_folder)
-        new_config = XCSKarel::Config.new(bot, server.api_version, new_config_path)
-        new_config.save
-
-        XCSKarel.log.info "Saved Bot \"#{new_config.name}\" configuration to #{new_config_path}.".green
-        system "open \"#{new_config_path}\""
+        XCSKarel::Application.save_bot(config_folder, bot, server.api_version)
       end
     end
 
