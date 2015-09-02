@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    xcskarel (0.7.1)
+    xcskarel (0.8.0)
       colored (= 1.2)
       commander (= 4.3.5)
       excon (= 0.45.4)
