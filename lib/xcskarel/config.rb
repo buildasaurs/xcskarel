@@ -14,6 +14,14 @@ module XCSKarel
       (config_json['name'] || File.basename(@path).split('.').first).gsub("botconfig_", "")
     end
 
+    def branch
+      blueprint = @json['configuration']['sourceControlBlueprint']
+      primary_repo_key = blueprint['DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey']
+      location = blueprint['DVTSourceControlWorkspaceBlueprintLocationsKey'][primary_repo_key]
+      # might be nil if we're pointing to a commit, for instance.
+      return location['DVTSourceControlBranchIdentifierKey']
+    end
+
     def original_bot_name
       @json['name'] || config_json['original_bot_name']
     end
