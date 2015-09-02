@@ -6,12 +6,20 @@ before_all do
 
 end
 
-lane :test do
-  run_tests
+lane :ci_test do
+  sh "cd .. && bundle install"
+  sh "cd .. && rake install"
+  sh "cd .. && rspec"
+end
+
+lane :local_test do
+  sh "cd .. && bundle install --path vendor/bundle"
+  sh "cd .. && sudo rake install"
+  sh "cd .. && rspec"
 end
 
 lane :release do
-  run_tests
+  local_test
   validate_repo
   version = validate_version
   opts = { version: version }
@@ -21,12 +29,6 @@ lane :release do
   opts[:github_url] = github_url
   opts[:release] = release
   slack_brag(opts)
-end
-
-private_lane :run_tests do
-  sh "cd .. && bundle install --path vendor/bundle"
-  sh "cd .. && sudo rake install"
-  sh "cd .. && rspec"
 end
 
 private_lane :validate_repo do
