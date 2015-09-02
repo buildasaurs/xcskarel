@@ -3,6 +3,10 @@
 [![Travis Status](https://travis-ci.org/czechboy0/xcskarel.svg)](https://travis-ci.org/czechboy0/xcskarel)
 [![Gem Version](https://badge.fury.io/rb/xcskarel.svg)](http://badge.fury.io/rb/xcskarel)
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://en.wikipedia.org/wiki/MIT_License)
+[![Blog](https://img.shields.io/badge/blog-honzadvorsky.com-green.svg)](http://honzadvorsky.com)
+[![Twitter Czechboy0](https://img.shields.io/badge/twitter-czechboy0-green.svg)](http://twitter.com/czechboy0)
+
 Quickly manage your Xcode Server & Bots from the command line.
 
 # :white_check_mark: install
