@@ -1,5 +1,17 @@
 # Change Log
 
+## [Unreleased](https://github.com/czechboy0/xcskarel/tree/HEAD)
+
+[Full Changelog](https://github.com/czechboy0/xcskarel/compare/0.7.1...HEAD)
+
+**Merged pull requests:**
+
+- Bot Configs Managements [\#8](https://github.com/czechboy0/xcskarel/pull/8) ([czechboy0](https://github.com/czechboy0))
+
+## [0.7.1](https://github.com/czechboy0/xcskarel/tree/0.7.1) (2015-09-01)
+
+[Full Changelog](https://github.com/czechboy0/xcskarel/compare/0.7.0...0.7.1)
+
 ## [0.7.0](https://github.com/czechboy0/xcskarel/tree/0.7.0) (2015-09-01)
 
 [Full Changelog](https://github.com/czechboy0/xcskarel/compare/0.3.2...0.7.0)
