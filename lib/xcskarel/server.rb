@@ -25,7 +25,10 @@ module XCSKarel
       response = get_endpoint('/bots')
       raise "You are unauthorized to access data on #{@host}, please check that you're passing in a correct username and password.".red if response.status == 401
       raise "Failed to fetch Bots from Xcode Server at #{@host}, response: #{response.status}: #{response.body}.".red if response.status != 200
-      JSON.parse(response.body)['results']
+      bots = JSON.parse(response.body)['results']
+
+      # sort them alphabetically by name
+      bots.sort_by { |bot| bot['name'] }
     end
 
     def get_integrations(bot_id)
@@ -46,12 +49,17 @@ module XCSKarel
       bots = self.get_bots
       bots.map do |bot|
         status = {}
-        status['bot_name'] = bot['name']
-        status['bot_id'] = bot['_id']
+        status['name'] = bot['name']
+        status['id'] = bot['_id']
+        status['branch'] = XCSKarel::Config.new(bot, nil, nil).branch
         last_integration = self.get_integrations(bot['_id']).first # sorted from newest to oldest
-        status['integration_step'] = last_integration['currentStep']
-        status['integration_result'] = last_integration['result']
-        status['integration_number'] = last_integration['number']
+        if last_integration
+          status['current_step'] = last_integration['currentStep']
+          status['result'] = last_integration['result']
+          status['count'] = last_integration['number']
+        else
+          status['count'] = 0
+        end
         bot_statuses << status
       end
       return bot_statuses
