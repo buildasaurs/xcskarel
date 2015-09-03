@@ -31,10 +31,27 @@ module XCSKarel
       bots.sort_by { |bot| bot['name'] }
     end
 
-    def get_integrations(bot_id)
-      response = get_endpoint("/bots/#{bot_id}/integrations")
+    def get_integrations(bot_id, limit=nil)
+      raise "No Bot id provided".red if !bot_id || bot_id.empty?
+      limit_s = limit ? "?last=#{limit}" : ""
+      response = get_endpoint("/bots/#{bot_id}/integrations#{limit_s}")
       raise "Failed to fetch Integrations for Bot #{bot_id} from Xcode Server at #{@host}, response: #{response.status}: #{response.body}".red if response.status != 200
       JSON.parse(response.body)['results']
+    end
+
+    def get_integration(integration_id)
+      raise "No Integration id provided".red if !integration_id || integration_id.empty?
+      response = get_endpoint("/integrations/#{integration_id}")
+      raise "Failed to fetch an Integrations with id #{integration_id} from Xcode Server at #{@host}, response: #{response.status}: #{response.body}".red if response.status != 200
+      JSON.parse(response.body)
+    end
+
+    def get_issues(integration_id)
+      raise "No Integration id provided".red if !integration_id || integration_id.empty?
+      response = get_endpoint("/integrations/#{integration_id}/issues")
+      raise "Failed to fetch issues for an Integrations with id #{integration_id} from Xcode Server at #{@host}, response: #{response.status}: #{response.body}".red if response.status != 200
+      body = JSON.parse(response.body)
+      return body['results'] || body # support both xcode 6 and 7
     end
 
     def get_health
@@ -52,7 +69,7 @@ module XCSKarel
         status['name'] = bot['name']
         status['id'] = bot['_id']
         status['branch'] = XCSKarel::Config.new(bot, nil, nil).branch
-        last_integration = self.get_integrations(bot['_id']).first # sorted from newest to oldest
+        last_integration = self.get_integrations(bot['_id'], 1).first # sorted from newest to oldest
         if last_integration
           status['current_step'] = last_integration['currentStep']
           status['result'] = last_integration['result']
@@ -78,10 +95,10 @@ module XCSKarel
       return integration
     end
 
-    def find_bot_by_id_or_name(id_or_name)
+    def find_bot_by_id_or_name(id_or_name, raise_if_none_found=true)
       bots = self.get_bots
       found_bots = bots.select { |bot| [bot['name'], bot['_id']].index(id_or_name) != nil }
-      raise "No Bot found for \"#{id_or_name}\"".red if found_bots.count == 0
+      raise "No Bot found for \"#{id_or_name}\"".red if raise_if_none_found && found_bots.count == 0
       XCSKarel.log.warn "More than one Bot found for \"#{id_or_name}\", taking the first one (you shouldn't have more Bots with the same name!)".red if found_bots.count > 1
       return found_bots.first
     end
