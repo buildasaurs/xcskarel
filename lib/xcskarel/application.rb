@@ -1,3 +1,6 @@
+require 'xcskarel/filter'
+require 'json'
+
 module XCSKarel
   module Application
     def self.choose_bot(server)
@@ -91,6 +94,12 @@ module XCSKarel
       puts table.to_s
     end
 
+    def self.integrations(server, bot_id_or_name)
+      bot = server.find_bot_by_id_or_name(bot_id_or_name)
+      XCSKarel.log.debug "Found Bot #{bot['name']} with id #{bot['_id']}".yellow
+      server.get_integrations(bot['_id'])
+    end
+
     def self.integrate(server, bot_id_or_name)
 
       # find bot by id or name
@@ -102,6 +111,51 @@ module XCSKarel
 
       # print the new status (TODO: highlight the bot's row)
       self.print_status(server)
+    end
+
+    def self.issues(server, bot_id_or_name, integration_id)
+      integration = nil
+      if bot_id_or_name
+        bot = server.find_bot_by_id_or_name(bot_id_or_name)
+        # fetch last integration
+        integration = (server.get_integrations(bot['_id']).first || {})['_id']
+        raise "No Integration found for Bot \"#{bot['name']}\"".red unless integration
+      else
+        integration = server.get_integration(integration_id)['_id']
+        raise "No Integration found for id #{integration_id}".red unless integration
+      end
+
+      # fetch issues
+      issues = server.get_issues(integration)
+      return issues
+    end
+
+    def self.format(object, options, allowed_key_paths, allow_empty_container_leaves=true)
+      unless options.no_filter
+
+        extra_filters = []
+
+        unless allow_empty_container_leaves
+          # optionally add an override to filter out empty containers as leaves
+          empty_leaves = lambda do |k,v|
+            return true unless v.is_a?(Array) || v.is_a?(Hash)
+            return v.count > 0
+          end
+          extra_filters << empty_leaves
+        end
+
+        # create a super-filter composed from all the gathered filters
+        custom_filters = lambda do |k,v|
+          extra_filters.each do |filter|
+            return false unless filter.call(k,v)
+          end
+          return true
+        end
+
+        object = XCSKarel::Filter.filter_key_paths(object, allowed_key_paths, custom_filters)
+      end
+      out = options.no_pretty ? JSON.generate(object) : JSON.pretty_generate(object)
+      return out
     end
 
   end

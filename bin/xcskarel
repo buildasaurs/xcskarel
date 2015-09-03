@@ -12,18 +12,25 @@ class XCSKarelApplication
   include Commander::Methods
 
   def add_xcs_options(c)
-    c.option '--host Hostname', '(required) Xcode Server\'s hostname or IP address (default: localhost)'
-    c.option '--user Username', 'Xcode Server username'
-    c.option '--pass Password', 'Xcode Server password'
+    c.option '--host Hostname', 'Xcode Server\'s hostname or IP address (default: localhost) (also can be specified as the environment variable XCSKAREL_HOST)'
+    c.option '--user Username', 'Xcode Server username (also can be specified as the environment variable XCSKAREL_USER)'
+    c.option '--pass Password', 'Xcode Server password (also can be specified as the environment variable XCSKAREL_PASS)'
   end
 
   def add_bot_options(c)
-    c.option '--bot BOT_ID', '(required) Bot identifier'
+    c.option '--bot BOT_ID_OR_NAME', '(required) Bot identifier or name'
+  end
+
+  def add_bot_or_integration_options(c)
+    c.option '--bot BOT_ID_OR_NAME', 'Bot identifier or name'
+    c.option '--integration INTEGRATION_ID', 'Integration identifier'
   end
 
   def create_server_from_options(options)
-    host = options.host || "localhost"
-    XCSKarel::Server.new(host, options.user, options.pass)
+    host = options.host || ENV['XCSKAREL_HOST'] || "localhost"
+    user = options.user || ENV['XCSKAREL_USER']
+    pass = options.pass || ENV['XCSKAREL_PASS']
+    XCSKarel::Server.new(host, user, pass)
   end
 
   def run
@@ -92,14 +99,7 @@ class XCSKarelApplication
       c.action do |args, options|
         server = create_server_from_options(options)
         all_bots = server.get_bots
-        # create Bot instances
-        # bot_objs = all_bots.map { |json| XCSKarel::Bot.new(json) }
-        # bot_files = bot_objs.map { |bot| name = "./xcskarel/#{bot.json['_id']}.json"; bot.to_file(name); name }
-        unless options.no_filter
-          all_bots = XCSKarel::Filter.filter_key_paths(all_bots, ['name', '_id'])
-        end
-        out = options.no_pretty ? JSON.generate(all_bots) : JSON.pretty_generate(all_bots)
-        puts out
+        puts XCSKarel::Application.format(all_bots, options, ['name', '_id'])
       end
     end
 
@@ -112,12 +112,37 @@ class XCSKarelApplication
       c.action do |args, options|
         raise "No Bot id was specified, please see `xcskarel integrations --help`" unless options.bot
         server = create_server_from_options(options)
-        all_integrations = server.get_integrations(options.bot)
-        unless options.no_filter
-          all_integrations = XCSKarel::Filter.filter_key_paths(all_integrations, ['number', '_id', 'currentStep', 'result'])
-        end
-        out = options.no_pretty ? JSON.generate(all_integrations) : JSON.pretty_generate(all_integrations)
-        puts out
+        all_integrations = XCSKarel::Application.integrations(server, options.bot)
+        puts XCSKarel::Application.format(all_integrations, options, ['number', '_id', 'currentStep', 'result'])
+      end
+    end
+
+    command :issues do |c|
+      c.syntax = 'xcskarel issues [options]'
+      c.description = 'Fetches issues of an integration or a Bot\'s last integration'
+      c.example 'fetches issues for a given integration on localhost', 'xcskarel issues --integration 448946985304230369392c2e6b05a821'
+      c.example 'fetches issues for a given bot\'s last integration', 'xcskarel issues --bot "My Bot" --host 192.168.1.64'
+      add_xcs_options(c)
+      add_bot_or_integration_options(c)
+      c.action do |args, options|
+        server = create_server_from_options(options)
+        bot = options.bot
+        integration = options.integration
+        raise "Exactly one of Bot or Integration must be specified, please see `xcskarel issues --help`" unless bot || integration
+        all_issues = XCSKarel::Application.issues(server, bot, integration)
+        key_paths = [
+          'buildServiceErrors.*', 
+          'buildServiceWarnings.message', 
+          'triggerErrors.*',
+          'analyzerWarnings.*', 
+          'errors.*.message',
+          'testFailures.*.testCase', 
+          'testFailures.*.documentFilePath', 
+          'testFailures.*.message',
+          'warnings.*.message',
+          'warnings.*.documentFilePath'
+        ]
+        puts XCSKarel::Application.format(all_issues, options, key_paths, false)
       end
     end
 
@@ -144,11 +169,7 @@ class XCSKarelApplication
       c.action do |args, options|
         server = create_server_from_options(options)
         all_health = server.get_health
-        unless options.no_filter
-          all_health = XCSKarel::Filter.filter_key_paths(all_health, ['uptime'])
-        end
-        out = options.no_pretty ? JSON.generate(all_health) : JSON.pretty_generate(all_health)
-        puts out
+        puts XCSKarel::Application.format(all_health, options, ['uptime'])
       end
     end
 
