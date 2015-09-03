@@ -59,13 +59,13 @@ private_lane :release_gem do |options|
 end
 
 private_lane :changelog do
-# regenerate changelog
-ensure_git_status_clean
-sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
+  # regenerate changelog
+  ensure_git_status_clean
+  sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
 
-# commit the changes
-sh "cd .. && git commit -am 'changelog' && git push"
-ensure_git_status_clean
+  # commit the changes
+  sh "cd .. && git commit -am 'changelog' && git push"
+  ensure_git_status_clean
 end
 
 private_lane :release_github do |options|
@@ -77,10 +77,8 @@ private_lane :release_github do |options|
   raise "GitHub release #{version} already exists!" if github_release
 
   # regenerate changelog
-  changelog
-
   # open the changelog so that we can copy the changes into clipboard
-  sh "cd .. && subl CHANGELOG.md"
+  sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN && subl CHANGELOG.md"
 
   # ask for details about the release
   title = prompt(text: 'Title: ')
