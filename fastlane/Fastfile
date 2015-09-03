@@ -87,7 +87,7 @@ private_lane :release_github do |options|
   description = prompt(text: "Please enter a changelog: ",
                        multi_line_end_keyword: "END")
 
-  release = set_github_release(
+  new_release = set_github_release(
     api_token: ENV['GITHUB_TOKEN'],
     repository_name: github_url,
     name: [version, title].join(" - "),
@@ -100,7 +100,7 @@ private_lane :release_github do |options|
   # regenerate the changelog with the new release now
   changelog
 
-  return release
+  new_release
 end
 
 private_lane :slack_brag do |options|
