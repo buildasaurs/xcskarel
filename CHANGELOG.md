@@ -1,7 +1,8 @@
 # Change Log
 
-## [0.12.0](https://github.com/czechboy0/xcskarel/tree/0.12.0) (2015-09-03)
-[Full Changelog](https://github.com/czechboy0/xcskarel/compare/0.11.0...0.12.0)
+## [Unreleased](https://github.com/czechboy0/xcskarel/tree/HEAD)
+
+[Full Changelog](https://github.com/czechboy0/xcskarel/compare/0.11.0...HEAD)
 
 **Merged pull requests:**
 

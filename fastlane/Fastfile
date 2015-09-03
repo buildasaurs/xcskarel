@@ -60,7 +60,6 @@ end
 
 private_lane :changelog do
   # regenerate changelog
-  ensure_git_status_clean
   sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
 
   # commit the changes
