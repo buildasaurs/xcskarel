@@ -6,7 +6,7 @@
 
 **Merged pull requests:**
 
-- New endpoint: Issues, better JSON filtering [\#11](https://github.com/czechboy0/xcskarel/pull/11) ([czechboy0](https://github.com/czechboy0))
+- New endpoint: Issues, more powerful JSON filtering [\#11](https://github.com/czechboy0/xcskarel/pull/11) ([czechboy0](https://github.com/czechboy0))
 
 ## [0.11.0](https://github.com/czechboy0/xcskarel/tree/0.11.0) (2015-09-02)
 [Full Changelog](https://github.com/czechboy0/xcskarel/compare/0.10.0...0.11.0)
