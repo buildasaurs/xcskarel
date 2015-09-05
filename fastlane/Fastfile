@@ -13,8 +13,8 @@ lane :ci_test do
 end
 
 lane :local_test do
-  sh "cd .. && bundle install --path vendor/bundle"
-  sh "cd .. && sudo rake install"
+  sh "cd .. && bundle install"
+  sh "cd .. && rake install"
   sh "cd .. && rspec"
 end
 
@@ -53,7 +53,7 @@ private_lane :validate_version do
 end
 
 private_lane :release_gem do |options|
-  sh "cd .. && sudo rake install"
+  sh "cd .. && rake install"
   gem_path = "./pkg/xcskarel-#{options[:version]}.gem"
   sh "cd .. && gem push #{gem_path}"
 end
