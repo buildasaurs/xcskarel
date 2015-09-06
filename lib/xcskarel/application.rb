@@ -158,5 +158,21 @@ module XCSKarel
       return out
     end
 
+    def self.remote_logs(connection)
+      logs_path = "/Library/Developer/XcodeServer/Logs"
+      log_control = File.join(logs_path, "xcscontrol.log")
+      log_build = File.join(logs_path, "xcsbuildd.log")
+      lives = []
+      [log_control, log_build].each do |log|
+        puts "\n\n------- Printing output of #{log} at #{connection.host} -------\n".green
+        res = connection.execute("tail -n 20 #{log}")
+        puts res.yellow
+        live = "ssh #{connection.user}@#{connection.host} tail -f #{log}".green
+        lives << live
+      end
+      live_all = lives.map { |l| "\"#{l}\"" }.join("\n")
+      XCSKarel.log.info "To connect to the logs live run either:\n#{live_all}"
+    end
+
   end
 end

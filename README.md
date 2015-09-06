@@ -109,6 +109,7 @@ you can also specify the Integration id like this `xcskarel issues --integration
 - `config show`    Opens the selected config for editing
 
 ## others
+- `xcskarel logs --host 10.99.0.57 --user honzadvorsky` - prints build and control logs from the remote Xcode Server
 - `xcskarel health --host 10.99.0.57` - health information of the server like uptime etc
 
 ## server (wraps [xcscontrol](http://honzadvorsky.com/articles/2015-08-12-xcode_server_hacks_cli_xcscontrol/) commands)

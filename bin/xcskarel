@@ -11,10 +11,14 @@ XCSKarel.set_no_log(true)
 class XCSKarelApplication
   include Commander::Methods
 
-  def add_xcs_options(c)
+  def add_xcs_creds(c)
     c.option '--host Hostname', 'Xcode Server\'s hostname or IP address (default: localhost) (also can be specified as the environment variable XCSKAREL_HOST)'
     c.option '--user Username', 'Xcode Server username (also can be specified as the environment variable XCSKAREL_USER)'
     c.option '--pass Password', 'Xcode Server password (also can be specified as the environment variable XCSKAREL_PASS)'
+  end
+
+  def add_xcs_options(c)
+    add_xcs_creds(c)
   end
 
   def add_bot_options(c)
@@ -26,11 +30,21 @@ class XCSKarelApplication
     c.option '--integration INTEGRATION_ID', 'Integration identifier'
   end
 
-  def create_server_from_options(options)
+  def creds_from_options(options)
     host = options.host || ENV['XCSKAREL_HOST'] || "localhost"
-    user = options.user || ENV['XCSKAREL_USER']
+    user = options.user || ENV['XCSKAREL_USER'] || ENV['USER']
     pass = options.pass || ENV['XCSKAREL_PASS']
-    XCSKarel::Server.new(host, user, pass)
+    return host, user, pass
+  end
+
+  def create_server_from_options(options)
+    creds = creds_from_options(options)
+    XCSKarel::Server.new(*creds)
+  end
+
+  def create_connection_from_options(options)
+    creds = creds_from_options(options)
+    XCSKarel::Remote::Connection.new(*creds)
   end
 
   def run
@@ -181,6 +195,19 @@ class XCSKarelApplication
       c.action do |args, options|
         server = create_server_from_options(options)
         XCSKarel::Application.print_status(server)
+      end
+    end
+
+    # Connecting to an Xcode Server machine
+
+    command :logs do |c|
+      c.syntax = 'xcskarel logs [options]'
+      c.description = 'Gets build and control logs'
+      c.example 'print logs', 'xcskarel logs --host 192.168.1.64 --user honzadvorsky'
+      add_xcs_creds(c)
+      c.action do |args, options|
+        connection = create_connection_from_options(options)
+        XCSKarel::Application.remote_logs(connection)
       end
     end
 
