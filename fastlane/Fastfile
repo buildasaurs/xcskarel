@@ -1,6 +1,6 @@
 
-# update_fastlane
-fastlane_version "1.22.0"
+update_fastlane
+fastlane_version "1.24.0"
 
 before_all do
 
