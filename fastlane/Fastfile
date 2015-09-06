@@ -63,7 +63,8 @@ private_lane :changelog do
   sh "cd .. && github_changelog_generator -t $GITHUB_TOKEN"
 
   # commit the changes
-  sh "cd .. && git commit -am 'changelog' && git push"
+  sh "cd .. && git commit -am 'changelog'"
+  push_to_git_remote
   ensure_git_status_clean
 end
 
