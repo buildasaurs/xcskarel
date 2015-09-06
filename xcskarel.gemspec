@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 3.1.0'
   s.add_development_dependency 'fastlane'
+  s.add_development_dependency 'github_changelog_generator'
   
 end
 
