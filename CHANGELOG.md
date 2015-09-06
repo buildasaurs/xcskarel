@@ -1,5 +1,15 @@
 # Change Log
 
+## [Unreleased](https://github.com/czechboy0/xcskarel/tree/HEAD)
+
+[Full Changelog](https://github.com/czechboy0/xcskarel/compare/0.14.0...HEAD)
+
+**Closed issues:**
+
+- Add travis & tests [\#4](https://github.com/czechboy0/xcskarel/issues/4)
+- Default --host to localhost [\#3](https://github.com/czechboy0/xcskarel/issues/3)
+- Migrate to fastlane for easy deployment [\#1](https://github.com/czechboy0/xcskarel/issues/1)
+
 ## [0.14.0](https://github.com/czechboy0/xcskarel/tree/0.14.0) (2015-09-03)
 [Full Changelog](https://github.com/czechboy0/xcskarel/compare/0.11.0...0.14.0)
 
