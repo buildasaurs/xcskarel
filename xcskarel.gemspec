@@ -28,9 +28,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'commander', '4.3.5' # CLI parser
   s.add_dependency 'terminal-table', '1.4.5' # nice terminal tables
   s.add_dependency 'net-ssh', '2.9.2' # ssh logging into server
-  s.add_dependency 'uri'
-  s.add_dependency 'set'
-  s.add_dependency 'base64'
 
   s.add_development_dependency 'pry', '0.10.1' # debugging
   s.add_development_dependency 'pry-byebug', '3.2.0' # better debugging
