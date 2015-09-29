@@ -1,12 +1,13 @@
 PATH
   remote: .
   specs:
-    xcskarel (0.16.0)
+    xcskarel (0.16.1)
       colored (= 1.2)
       commander (= 4.3.5)
       excon (= 0.45.4)
       json (= 1.8.3)
       logger (= 1.2.8)
+      net-ssh (= 2.9.2)
       terminal-table (= 1.4.5)
 
 GEM
