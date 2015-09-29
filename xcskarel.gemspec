@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'uri'
   s.add_dependency 'set'
   s.add_dependency 'base64'
-  s.add_dependency 'securerandom'
 
   s.add_development_dependency 'pry', '0.10.1' # debugging
   s.add_development_dependency 'pry-byebug', '3.2.0' # better debugging
