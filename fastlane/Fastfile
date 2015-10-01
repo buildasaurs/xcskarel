@@ -85,8 +85,8 @@ private_lane :release_github do |options|
   description = prompt(text: "Please enter a changelog: ",
                        multi_line_end_keyword: "END")
 
+  ENV["FL_GITHUB_RELEASE_API_TOKEN"] = ENV["GITHUB_TOKEN"]
   new_release = set_github_release(
-    api_token: ENV['GITHUB_TOKEN'],
     commitish: 'master',
     repository_name: github_url,
     name: [version, title].join(" - "),
