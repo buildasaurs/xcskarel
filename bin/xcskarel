@@ -107,8 +107,8 @@ class XCSKarelApplication
     command :bots do |c|
       c.syntax = 'xcskarel bots [options]'
       c.description = 'Fetches all Bots found on the specified server'
-      c.example 'get all bot names & identifiers', 'xcskarel bots --hostname 127.0.0.1'
-      c.example 'get all bot metadata', 'xcskarel bots --no_filter --hostname 127.0.0.1'
+      c.example 'get all bot names & identifiers', 'xcskarel bots --host 127.0.0.1'
+      c.example 'get all bot metadata', 'xcskarel bots --no_filter --host 127.0.0.1'
       add_xcs_options(c)
       c.action do |args, options|
         server = create_server_from_options(options)
@@ -117,10 +117,24 @@ class XCSKarelApplication
       end
     end
 
+    command :'delete bot' do |c|
+      c.syntax = 'xcskarel delete bot [options]'
+      c.description = 'Deletes the bot specified by bot name or bot id'
+      c.example 'delete the bot on host with name or id', 'xcskarel delete bot --host 127.0.0.1 --bot "My Bot"'
+      add_xcs_options(c)
+      add_bot_options(c)
+      c.action do |args, options|
+        raise "No Bot id was specified, please see `xcskarel delete bot --help`" unless options.bot
+        server = create_server_from_options(options)
+        delete_result = XCSKarel::Application.delete_bot(server, options.bot)
+        puts delete_result
+      end
+    end
+
     command :integrations do |c|
       c.syntax = 'xcskarel integrations [options]'
       c.description = 'Fetches all Integrations for a specified Bot identifier'
-      c.example 'get all integration identifiers, numbers & results', 'xcskarel integrations --bot BOT_ID --hostname 127.0.0.1'
+      c.example 'get all integration identifiers, numbers & results', 'xcskarel integrations --bot BOT_ID --host 127.0.0.1'
       add_xcs_options(c)
       add_bot_options(c)
       c.action do |args, options|
@@ -178,7 +192,7 @@ class XCSKarelApplication
     command :health do |c|
       c.syntax = 'xcskarel health [options]'
       c.description = 'Fetches health information of the specified server'
-      c.example 'get health', 'xcskarel health --hostname 127.0.0.1'
+      c.example 'get health', 'xcskarel health --host 127.0.0.1'
       add_xcs_options(c)
       c.action do |args, options|
         server = create_server_from_options(options)
@@ -190,7 +204,7 @@ class XCSKarelApplication
     command :status do |c|
       c.syntax = 'xcskarel status [options]'
       c.description = 'Fetches status information of the specified server'
-      c.example 'get status', 'xcskarel status --hostname 127.0.0.1'
+      c.example 'get status', 'xcskarel status --host 127.0.0.1'
       add_xcs_options(c)
       c.action do |args, options|
         server = create_server_from_options(options)

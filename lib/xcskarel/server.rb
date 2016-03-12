@@ -90,9 +90,20 @@ module XCSKarel
         integration = JSON.parse(integration)
         XCSKarel.log.info "Successfully started integration #{integration['number']} on Bot \"#{bot['name']}\"".green
       else
-        raise "Failed to integrate Bot #{bot_id}".red
+        raise "Failed to integrate Bot #{bot['name']}".red
       end
       return integration
+    end
+
+    def delete_bot(bot)
+      response = delete_endpoint("/bots/#{bot['_id']}", nil)
+      delete = response.body
+      if response.status == 204
+        XCSKarel.log.info "Successfully deleted Bot \"#{bot['name']}\"".green
+      else
+        raise "Failed to delete Bot #{bot['name']}".red
+      end
+      return delete
     end
 
     def find_bot_by_id_or_name(id_or_name, raise_if_none_found=true)
@@ -125,6 +136,10 @@ module XCSKarel
       call_endpoint("post", endpoint, body)
     end
 
+    def delete_endpoint(endpoint, body)
+      call_endpoint("delete", endpoint, body)
+    end
+
     private
 
     def call_endpoint(method, endpoint, body)
@@ -135,6 +150,8 @@ module XCSKarel
         response = Excon.get(url, headers: headers)
       when "post"
         response = Excon.post(url, headers: headers, body: body)
+      when "delete"
+        response = Excon.delete(url, headers: headers, body: body)
       else
         raise "Unrecognized method #{method}"
       end
