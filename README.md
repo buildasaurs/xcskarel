@@ -144,6 +144,10 @@ export XCSKAREL_HOST="192.168.1.64"
 - [Buildasaur](https://github.com/czechboy0/Buildasaur) - connecting Xcode Server with GitHub Pull Requests
 - [XcodeServer-API-Docs](https://github.com/czechboy0/XcodeServer-API-Docs) - Unofficial attempt at full Xcode Server API documentation
 
+:blue_heart: Code of Conduct
+------------
+Please note that this project is released with a [Contributor Code of Conduct](./CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
 # :gift_heart: Contributing
 Please create an issue with a description of a problem or a pull request with a fix.
 
