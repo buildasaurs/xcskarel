@@ -96,7 +96,7 @@ module XCSKarel
     end
 
     def delete_bot(bot)
-      response = delete_endpoint("/bots/#{bot['_id']}", nil)
+      response = delete_endpoint("/bots/#{bot['_id']}")
       delete = response.body
       if response.status == 204
         XCSKarel.log.info "Successfully deleted Bot \"#{bot['name']}\"".green
@@ -136,8 +136,8 @@ module XCSKarel
       call_endpoint("post", endpoint, body)
     end
 
-    def delete_endpoint(endpoint, body)
-      call_endpoint("delete", endpoint, body)
+    def delete_endpoint(endpoint)
+      call_endpoint("delete", endpoint, nil)
     end
 
     private
