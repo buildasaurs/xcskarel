@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'pry-byebug', '3.2.0' # better debugging
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec', '~> 3.1.0'
+  s.add_development_dependency 'rspec', '~> 3.4.0'
   s.add_development_dependency 'fastlane'
   s.add_development_dependency 'github_changelog_generator'
   
