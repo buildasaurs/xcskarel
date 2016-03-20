@@ -90,9 +90,32 @@ module XCSKarel
         integration = JSON.parse(integration)
         XCSKarel.log.info "Successfully started integration #{integration['number']} on Bot \"#{bot['name']}\"".green
       else
-        raise "Failed to integrate Bot #{bot_id}".red
+        raise "Failed to integrate Bot #{bot['name']}".red
       end
       return integration
+    end
+
+    def delete_bot(bot)
+      response = delete_endpoint("/bots/#{bot['_id']}")
+      delete = response.body
+      if response.status == 204
+        XCSKarel.log.info "Successfully deleted Bot \"#{bot['name']}\"".green
+      else
+        raise "Failed to delete Bot #{bot['name']}".red
+      end
+      return delete
+    end
+
+    def duplicate_bot(bot, body)
+      # puts body
+      response = post_endpoint("/bots/#{bot['_id']}/duplicate", body)
+      duplicate = response.body
+      if response.status == 201
+        XCSKarel.log.info "Successfully duplicated Bot \"#{bot['name']}\"".green
+      else
+        raise "Failed to duplicate Bot #{bot['name']}".red
+      end
+      return JSON.parse(duplicate)
     end
 
     def find_bot_by_id_or_name(id_or_name, raise_if_none_found=true)
@@ -125,6 +148,14 @@ module XCSKarel
       call_endpoint("post", endpoint, body)
     end
 
+    def delete_endpoint(endpoint)
+      call_endpoint("delete", endpoint, nil)
+    end
+
+    def patch_endpoint(endpoint, body)
+      call_endpoint("patch", endpoint, body)
+    end
+  
     private
 
     def call_endpoint(method, endpoint, body)
@@ -134,7 +165,13 @@ module XCSKarel
       when "get"
         response = Excon.get(url, headers: headers)
       when "post"
-        response = Excon.post(url, headers: headers, body: body)
+        local_headers = headers
+        local_headers['Content-Type'] = 'application/json' unless body.nil?
+        response = Excon.post(url, headers: local_headers, body: body)
+      when "delete"
+        response = Excon.delete(url, headers: headers, body: body)
+      when "patch"
+        response = Excon.patch(url, headers: headers, body: body)
       else
         raise "Unrecognized method #{method}"
       end

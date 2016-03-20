@@ -100,6 +100,18 @@ module XCSKarel
       server.get_integrations(bot['_id'])
     end
 
+    def self.delete_bot(server, bot_id_or_name)
+      bot = server.find_bot_by_id_or_name(bot_id_or_name)
+      XCSKarel.log.debug "Found Bot #{bot['name']} with id #{bot['_id']}".yellow
+      server.delete_bot(bot)
+    end
+
+    def self.duplicate_bot(server, bot_id_or_name, body)
+      bot = server.find_bot_by_id_or_name(bot_id_or_name)
+      XCSKarel.log.debug "Found Bot #{bot['name']} with id #{bot['_id']}".yellow
+      server.duplicate_bot(bot, body)
+    end
+
     def self.integrate(server, bot_id_or_name)
 
       # find bot by id or name
