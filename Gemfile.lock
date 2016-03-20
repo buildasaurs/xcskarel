@@ -214,7 +214,6 @@ GEM
       byebug (~> 5.0)
       pry (~> 0.10)
     rack (1.6.4)
-      rack (>= 1.0)
     rake (11.1.1)
     representable (2.3.0)
       uber (~> 0.0.7)
@@ -303,7 +302,7 @@ DEPENDENCIES
   pry (= 0.10.1)
   pry-byebug (= 3.2.0)
   rake
-  rspec (~> 3.4.0)
+  rspec (~> 3.1.0)
   xcskarel!
 
 BUNDLED WITH
