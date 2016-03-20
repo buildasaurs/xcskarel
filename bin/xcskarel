@@ -131,6 +131,38 @@ class XCSKarelApplication
       end
     end
 
+    command :'duplicate bot' do |c|
+      c.syntax = 'xcskarel duplicate bot [options]'
+      c.description = 'Duplicates the bot by bot name or bot id with possible modifications'
+      c.example 'duplicate the bot on host with name', 'xcskarel duplicate bot --host 127.0.0.1 --bot "Useful bot" --config path/to/config.json'
+      c.option '--newname "New bot name"', 'The name for the newly duplicated bot'
+      c.option '--config FILE', 'A JSON file with configuration information for the duplicated bot'
+      add_xcs_options(c)
+      add_bot_options(c)
+      c.action do |args, options|
+        raise "No Bot id was specified, please see `xcskarel duplicate bot --help`" unless options.bot
+        server = create_server_from_options(options)
+        body = nil
+        body = { name: options.newname } unless options.newname.nil?
+        filePath = nil
+        filePath = File.expand_path(options.config) unless options.config.nil?
+        fileContents = nil
+        unless filePath.nil?
+          fileContents = File.read(filePath) if File.exists?(filePath)
+        end
+        unless fileContents.nil? || fileContents.empty?
+          if body.nil?
+            body = { configuration: JSON.parse(fileContents) }
+          else
+            body['configuration'] = JSON.parse(fileContents)
+          end
+        end
+        puts body
+        duplicate_result = XCSKarel::Application.duplicate_bot(server, options.bot, body.to_json)
+        puts XCSKarel::Application.format(duplicate_result, options, ['name', '_id'])
+      end
+    end
+  
     command :integrations do |c|
       c.syntax = 'xcskarel integrations [options]'
       c.description = 'Fetches all Integrations for a specified Bot identifier'

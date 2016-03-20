@@ -106,6 +106,18 @@ module XCSKarel
       return delete
     end
 
+    def duplicate_bot(bot, body)
+      # puts body
+      response = post_endpoint("/bots/#{bot['_id']}/duplicate", body)
+      duplicate = response.body
+      if response.status == 201
+        XCSKarel.log.info "Successfully duplicated Bot \"#{bot['name']}\"".green
+      else
+        raise "Failed to duplicate Bot #{bot['name']}".red
+      end
+      return JSON.parse(duplicate)
+    end
+
     def find_bot_by_id_or_name(id_or_name, raise_if_none_found=true)
       bots = self.get_bots
       found_bots = bots.select { |bot| [bot['name'], bot['_id']].index(id_or_name) != nil }
@@ -140,6 +152,10 @@ module XCSKarel
       call_endpoint("delete", endpoint, nil)
     end
 
+    def patch_endpoint(endpoint, body)
+      call_endpoint("patch", endpoint, body)
+    end
+  
     private
 
     def call_endpoint(method, endpoint, body)
@@ -149,9 +165,13 @@ module XCSKarel
       when "get"
         response = Excon.get(url, headers: headers)
       when "post"
-        response = Excon.post(url, headers: headers, body: body)
+        local_headers = headers
+        local_headers['Content-Type'] = 'application/json' unless body.nil?
+        response = Excon.post(url, headers: local_headers, body: body)
       when "delete"
         response = Excon.delete(url, headers: headers, body: body)
+      when "patch"
+        response = Excon.patch(url, headers: headers, body: body)
       else
         raise "Unrecognized method #{method}"
       end
